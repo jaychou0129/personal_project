@@ -17,48 +17,186 @@ Features:
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>MDID ConNect</title>
-	<meta charset="utf-8">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	<!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <title>MDID ConNect</title>
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<!-- Latest compiled JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+  <link href="MDB-Free_4/css/mdb.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
+  <script type="text/javascript" src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+  <script src="script.js"></script>
+
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="jumbotron disappear-when-too-small title" >
-			<h1 class="smaller-when-necessary">Mingdao International Department</h1>
-		</div>
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="index.php">ConNect</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li><a href="index.php">Home</a></li>
-      <li><a href="rooms.php">Available Classrooms</a></li>
-      <li class="active"><a href="reserve.php">Reserve</a></li>
-      <li><a href="history.php">My Reservations</a></li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-      <?php
-        if (isset($_SESSION['stuID'])) {
-          echo "<li><a href='logout.php'><span class='glyphicon glyphicon-log-out'></span> Sign out (".$_SESSION['stuID'].")</a></li>";
-        } else {
-          echo "<li><a href='login.php'><span class='glyphicon glyphicon-log-in'></span> Login</a></li>";
-        }
-      ?>
-    </ul>
-  </div>
-</nav>
+  <script type="text/javascript" src="MDB-Free_4/js/mdb.min.js"></script>
 
-<div class="container main-cont" >
-	<h1>This is Reserve.</h1>
-	<p>created Dec 16th 2018</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p><p>Test</p>
+  <div class="jumbotron disappear-when-too-small title" >
+      <h1 class="smaller-when-necessary">Mingdao International Department</h1>
+  </div>
+
+  <nav class="navbar navbar-inverse sticky-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span> 
+        </button>
+        <a class="navbar-brand" href="index.php">ConNect</a>
+      </div>
+      <ul class="nav navbar-nav" id="mainNavbar">
+        <li><a href="index.php">Home</a></li>
+        <li><a href="rooms.php">Available Classrooms</a></li>
+        <li class="active"><a href="reserve.php">Reserve</a></li>
+        <li><a href="history.php">My Reservations</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <?php
+          if (isset($_SESSION['stuID'])) {
+            echo "<li><a href='logout.php'><span class='glyphicon glyphicon-log-out'></span> Sign out (".$_SESSION['stuID'].")</a></li>";
+          } else {
+            echo "<li><a href='login.php'><span class='glyphicon glyphicon-log-in'></span> Login</a></li>";
+          }
+        ?>
+      </ul>
+    </div>
+  </nav>
+
+<div class="container-fluid main-cont bg-2" >
+
+    <div class="col-sm-2"></div> <!--BLANK-->
+    <div class="jumbotron col-sm-8" >
+    <h1>Reserve a room</h1>
+    <h3>Here are some important information to fill out:</h3>
+    <h5><span class="glyphicon glyphicon-asterisk" style="color:red;font-size:8px"></span> => required!</h5>
+    <br>
+
+    <form method="POST" action="reserve_server.php" id="reserve-form">
+      <div class="form-group">
+        <span class="glyphicon glyphicon-asterisk" style="color:red;font-size:8px"></span>
+        <label for="stuName">Sent by:</label>
+        <input type="text" class="form-control" value="<?php echo $_SESSION['class']." ".$_SESSION['name']." (".$_SESSION['stuID'].")"; ?>" readonly>
+        <input type="hidden" name="stuName" value="<?=$_SESSION['stuID'] ?>" />
+      </div>
+      <div class="form-group">
+        <span class="glyphicon glyphicon-asterisk" style="color:red;font-size:8px"></span>
+        <label for="room">Room:</label>
+        <select class="form-control" id="room" name="room">
+          <option value=""></option>
+          <option value="Tie-Mei Hall">Tie-Mei Hall</option>
+          <option value="8-1">8-1</option>
+          <option value="8-2">8-2</option>
+          <option value="8-3">8-3</option>
+          <option value="8-6">8-6</option>
+          <option value="9-1">9-1</option>
+          <option value="9-2">9-2</option>
+          <option value="9-7">9-7</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <span class="glyphicon glyphicon-asterisk" style="color:red;font-size:8px"></span>
+        <label for="date">Date:</label>
+        <div class="input-group date" id="datepicker">
+          <input type='text' class="form-control" id="date" name="date">
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+      </div>
+
+      <div class="form-group form-inline">
+        <span class="glyphicon glyphicon-asterisk" style="color:red;font-size:8px"></span>
+        <label>Periods:</label><br>
+        <div class="checkbox">
+          <label><input type="checkbox" class="custom-control-input" name="period" value="Morning HR Hour"> Morning HR Hour</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" class="custom-control-input" name="period" value="1"> Block 1</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" class="custom-control-input" name="period" value="2"> Block 2</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" class="custom-control-input" name="period" value="3"> Block 3</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" class="custom-control-input" name="period" value="4"> Block 4</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" class="custom-control-input" name="period" value="Lunch Break"> Lunch Break</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" class="custom-control-input" name="period" value="5"> Block 5</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" class="custom-control-input" name="period" value="6"> Block 6</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" class="custom-control-input" name="period" value="7"> Block 7</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" class="custom-control-input" name="period" value="8"> Block 8</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" class="custom-control-input" name="period" value="9"> Block 9</label>
+        </div>
+
+        <input type="hidden" name="periods" id="periods" />
+      </div>
+
+      <div class="form-group">
+        <span class="glyphicon glyphicon-asterisk" style="color:red;font-size:8px"></span>
+        <label for="purpose">Purpose:</label>
+        <textarea class="form-control" id="purpose" name="purpose" style="resize:vertical;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="personnel">Who else is involved:</label>
+        <textarea class="form-control" id="personnel" name="personnel" style="resize:vertical;"></textarea>
+      </div>
+      <h5 id="info-msg">Please fill in all required fields!</h5>
+      <button type="submit" class="btn btn-primary bg-1">Submit request</button> 
+    </form>
+  </div>
+  <div class="col-sm-2"></div><!--BLANK-->
+
 </div>
+
+<footer class="container-fluid bg-4 text-center" style="padding-top:30px; padding-bottom:30px">
+  <p>Created by Jay Chou.</p>
+  <p>Mingdao International Department, Taichung, Taiwan.</p>
+</footer>
+
+
+<script type="text/javascript">
+var getUrlParameter = function getUrlParameter(sParam) {
+  var sPageURL = window.location.search.substring(1),
+      sURLVariables = sPageURL.split('&'),
+      sParameterName,
+      i;
+
+  for (i = 0; i < sURLVariables.length; i++) {
+      sParameterName = sURLVariables[i].split('=');
+
+      if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+      }
+  }
+}
+
+if (getUrlParameter('room') != undefined) {
+  $('#room').val(getUrlParameter('room'));
+}
+</script>
 </body>
 </html>
