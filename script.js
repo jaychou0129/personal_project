@@ -1,10 +1,4 @@
 $(document).ready( function () {
-	/*$(".card-img-top").mouseover(function() {
-		this.animate({width: '250px'});
-	});
-	$(".card-img-top").mouseout(function() {
-		this.src="14.jpg";
-	});*/
 	$('#login-form').submit(function(event) {
 		if ($('#stuID').val() == "" || $('#pwd').val() == "") {
 			event.preventDefault();
@@ -37,14 +31,14 @@ $(document).ready( function () {
 		$(this).html("");
 	});
 
-	if($(window).width() <= 768) {
+	if($(window).width() <= 1030) {
       $('#mainNavbar').removeClass("in").addClass("collapse");
     } else {
       $('#mainNavbar').removeClass("collapse").addClass("in");
     }
 
 	$( window ).resize(function() {
-		if($(window).width() <= 768) {
+		if($(window).width() <= 1030) {
 	      $('#mainNavbar').removeClass("in").addClass("collapse");
 	    } else {
 	      $('#mainNavbar').removeClass("collapse").addClass("in");
@@ -90,6 +84,38 @@ $(document).ready( function () {
 	  }
 
 
+	  $("#acntType").change( function() { acntSearch(); });
+	  $("#acntSearchBar").on("keyup", function() { acntSearch(); });
+	  function acntSearch() {
+	  	var filterClass = "";
+	  	switch($("#acntType").val()) {
+	  		case "All":
+	  			filterClass = "";
+	  			break;
+	  		case "Stu":
+	  			filterClass = "warning";
+	  			break;
+	  		case "Tr":
+	  			filterClass = "success";
+	  			break;
+	  		case "Admins":
+	  			filterClass = "info";
+	  	}
+	  	if (filterClass != "") {
+			$("#displayTable > tbody > tr:not(#new_row)").filter(function() {
+		      $(this).toggle($(this).hasClass(filterClass));
+		    });
+	  	} else {
+	  		$("#displayTable > tbody > tr:not(#new_row)").show();
+	  	}
+
+	  	var value = $("#acntSearchBar").val().toLowerCase();
+	  	$("#displayTable > tbody > tr:visible ").filter(function() {
+	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+	    });
+	  }
+
+
 	  $("#historyShow").change( function() { historySearch(); });
 	  $("#historyStatus").change( function() { historySearch(); });
 	  $("#historySearchBar").on("keyup", function() { historySearch(); });
@@ -100,7 +126,7 @@ $(document).ready( function () {
 	  	var fullDate = d.getFullYear() + '-' + (month<10 ? '0' : '') + month + '-' + (day<10 ? '0' : '') + day;
 	  	switch($("#historyShow").val() ) {
 	  		case "all":
-				$("#displayTable > tbody > tr").show()
+				$("#displayTable > tbody > tr").show();
 	  			break;
 	  		case "future":
 	  			$("#displayTable > tbody > tr").filter(function() {
@@ -139,10 +165,18 @@ $(document).ready( function () {
 	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
 	    });
 	  }
+
+
 	  $("#historyClearSearch").click(function () {
 		$("#historySearchBar").val("");
 		$("#historyStatus").val("all");
 		$("#historyShow").val("all");
 		$("#displayTable > tbody > tr").show()
-	  })
+	  });
+
+		$("#acntClearSearch").click(function () {
+			$("#acntSearchBar").val("");
+			$("#acntType").val("All");
+		  	$("#displayTable > tbody > tr:not(#new_row)").show();
+		})
 });

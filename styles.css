@@ -50,7 +50,7 @@ td {
 
 .fader{
 	height:250px;
-	background-image: url('14.jpg');
+	/*background-image: url('14.jpg');*/
 	background-size: cover;
     line-height: 250px;
     font-size: 2.5em;
@@ -95,20 +95,15 @@ td {
 
 .main-cont {
 	padding-top: 50px;
-	padding-bottom: 30px;
+	padding-bottom: 70px;
 }
 
 .bg-1 { 
   background-color: #1abc9c !important; /* Green */
 }
-.bg-1-text {
-  color: #ffffff;
-}
+
 .bg-2 { 
   background-color: #474e5d !important; /* Dark Blue */
-}
-.bg-2-text {
-      color: #ffffff;
 }
 .bg-3 { 
   background-color: #ffffff; /* White */
@@ -116,7 +111,7 @@ td {
 }
 .bg-4 { 
   background-color: #2f2f2f; /* Black Gray */
-  color: #fff;
+  color: #ffffff;
 }
 
 div.title {
